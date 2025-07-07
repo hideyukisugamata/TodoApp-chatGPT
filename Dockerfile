@@ -1,7 +1,7 @@
 # ベースイメージ
 FROM php:8.2-fpm
 
-# 必要なパッケージインストール
+# 必要パッケージ
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -12,23 +12,22 @@ RUN apt-get update && apt-get install -y \
     unzip \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-# Composer インストール
+# Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # 作業ディレクトリ
 WORKDIR /var/www
 
-# 依存関係インストール
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader
-
-# アプリコードコピー
+# ここでアプリ全体を先にコピー
 COPY . .
 
-# パーミッション調整
+# Composer install
+RUN composer install --no-dev --optimize-autoloader
+
+# 権限
 RUN chown -R www-data:www-data /var/www
 
-# Laravel キャッシュなど
+# Laravel キャッシュ
 RUN php artisan config:cache \
     && php artisan route:cache \
     && php artisan view:cache
