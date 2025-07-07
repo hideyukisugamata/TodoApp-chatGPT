@@ -25,4 +25,7 @@ COPY deploy/supervisord.conf /etc/supervisord.conf
 
 EXPOSE 8080
 
+ENV PORT=8080
+
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
+
