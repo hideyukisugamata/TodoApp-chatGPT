@@ -57,6 +57,9 @@
         "test": [
             "@php artisan config:clear --ansi",
             "@php artisan test"
+        ],
+        "start":
+            ["php -S 0.0.0.0:8080 -t public"
         ]
     },
     "extra": {
